@@ -9,6 +9,8 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -17,6 +19,7 @@ import javax.swing.JPasswordField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
+import java.util.stream.IntStream;
 import java.awt.event.ActionEvent;
 
 public class RegistryForm extends JFrame {
@@ -25,15 +28,14 @@ public class RegistryForm extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	private JPanel contentPane;
 	private JButton btnCancel;
 	private JButton btnNext;
 	private JPanel pnCustomerInformation;
 	private JLabel lblNameAndSurname;
 	private JTextField txtNameAndSurname;
-	private JComboBox cbBirthYear;
+	private JComboBox<String> cbBirthYear;
 	private JPasswordField password1;
 	private JPasswordField password2;
 	private JLabel lblBirthDate;
@@ -76,7 +78,7 @@ public class RegistryForm extends JFrame {
 		contentPane.add(getPnCustomerInformation());
 		contentPane.add(getPnOrder());
 	}
-	
+
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
 			btnCancel = new JButton("Cancel");
@@ -91,19 +93,37 @@ public class RegistryForm extends JFrame {
 		}
 		return btnCancel;
 	}
+
 	private JButton getBtnNext() {
 		if (btnNext == null) {
 			btnNext = new JButton("Next");
+			btnNext.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					checkFields();
+				}
+			});
 			btnNext.setForeground(Color.WHITE);
 			btnNext.setBackground(Color.GREEN);
 			btnNext.setBounds(458, 361, 103, 39);
 		}
 		return btnNext;
 	}
+
+	private void checkFields() {
+		if (getTxtNameAndSurname().getText().isBlank() || String.valueOf(getPassword1().getPassword()).isBlank() || 
+				String.valueOf(getPassword2().getPassword()).isBlank()) {
+			JOptionPane.showMessageDialog(null, "None of the fields can be empty");
+		}
+		else if (!String.valueOf(getPassword1().getPassword()).equals(String.valueOf(getPassword2().getPassword()))) {
+			JOptionPane.showMessageDialog(null, "The password fields don't match");
+		}
+	}
+
 	private JPanel getPnCustomerInformation() {
 		if (pnCustomerInformation == null) {
 			pnCustomerInformation = new JPanel();
-			pnCustomerInformation.setBorder(new TitledBorder(null, "Customer Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnCustomerInformation.setBorder(
+					new TitledBorder(null, "Customer Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnCustomerInformation.setBackground(Color.WHITE);
 			pnCustomerInformation.setBounds(10, 11, 664, 270);
 			pnCustomerInformation.setLayout(null);
@@ -118,6 +138,7 @@ public class RegistryForm extends JFrame {
 		}
 		return pnCustomerInformation;
 	}
+
 	private JLabel getLblNameAndSurname() {
 		if (lblNameAndSurname == null) {
 			lblNameAndSurname = new JLabel("Name and Surname:");
@@ -126,6 +147,7 @@ public class RegistryForm extends JFrame {
 		}
 		return lblNameAndSurname;
 	}
+
 	private JTextField getTxtNameAndSurname() {
 		if (txtNameAndSurname == null) {
 			txtNameAndSurname = new JTextField();
@@ -134,14 +156,17 @@ public class RegistryForm extends JFrame {
 		}
 		return txtNameAndSurname;
 	}
-	private JComboBox getCbBirthYear() {
+
+	private JComboBox<String> getCbBirthYear() {
 		if (cbBirthYear == null) {
-			cbBirthYear = new JComboBox();
-			cbBirthYear.setModel(new DefaultComboBoxModel(new String[] {"1930", "1931", "1932"}));
+			cbBirthYear = new JComboBox<String>();
+			cbBirthYear.setModel(new DefaultComboBoxModel(
+					IntStream.rangeClosed(1920, 2020).mapToObj(String::valueOf).toArray()));
 			cbBirthYear.setBounds(186, 81, 194, 38);
 		}
 		return cbBirthYear;
 	}
+
 	private JPasswordField getPassword1() {
 		if (password1 == null) {
 			password1 = new JPasswordField();
@@ -149,6 +174,7 @@ public class RegistryForm extends JFrame {
 		}
 		return password1;
 	}
+
 	private JPasswordField getPassword2() {
 		if (password2 == null) {
 			password2 = new JPasswordField();
@@ -156,6 +182,7 @@ public class RegistryForm extends JFrame {
 		}
 		return password2;
 	}
+
 	private JLabel getLblBirthDate() {
 		if (lblBirthDate == null) {
 			lblBirthDate = new JLabel("Birthdate:");
@@ -164,6 +191,7 @@ public class RegistryForm extends JFrame {
 		}
 		return lblBirthDate;
 	}
+
 	private JLabel getLblPassword1() {
 		if (lblPassword1 == null) {
 			lblPassword1 = new JLabel("Password:");
@@ -172,6 +200,7 @@ public class RegistryForm extends JFrame {
 		}
 		return lblPassword1;
 	}
+
 	private JLabel getLblPassword2() {
 		if (lblPassword2 == null) {
 			lblPassword2 = new JLabel("Repeat Password");
@@ -180,11 +209,14 @@ public class RegistryForm extends JFrame {
 		}
 		return lblPassword2;
 	}
+
 	private JPanel getPnOrder() {
 		if (pnOrder == null) {
 			pnOrder = new JPanel();
 			pnOrder.setLayout(null);
-			pnOrder.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Order", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+			pnOrder.setBorder(new TitledBorder(
+					new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Order",
+					TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			pnOrder.setBackground(Color.WHITE);
 			pnOrder.setBounds(10, 292, 390, 108);
 			pnOrder.add(getRdbtnOnSite());
@@ -192,6 +224,7 @@ public class RegistryForm extends JFrame {
 		}
 		return pnOrder;
 	}
+
 	private JRadioButton getRdbtnOnSite() {
 		if (rdbtnOnSite == null) {
 			rdbtnOnSite = new JRadioButton("On site");
@@ -200,6 +233,7 @@ public class RegistryForm extends JFrame {
 		}
 		return rdbtnOnSite;
 	}
+
 	private JRadioButton getRdbtnTakeAway() {
 		if (rdbtnTakeAway == null) {
 			rdbtnTakeAway = new JRadioButton("Take away");
