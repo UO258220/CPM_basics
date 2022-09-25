@@ -62,5 +62,13 @@ public class Order {
 			code += base.charAt(numero);
 		}
 	}
+	
+	public float calcTotal() {
+		float total = 0.0f;
+		for (Product a : orderList) {
+			total += a.getPrice() * a.getUnits();
+		}
+		return total;
+	}
 }
 
