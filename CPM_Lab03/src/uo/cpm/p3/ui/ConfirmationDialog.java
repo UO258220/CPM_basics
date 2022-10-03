@@ -44,6 +44,7 @@ public class ConfirmationDialog extends JDialog {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ConfirmationDialog.class.getResource("/uo/cpm/p3/ui/img/logo.PNG")));
 		setBounds(100, 100, 500, 300);
 
+		getTxtCode().setText(this.rf.getMw().getMcDonalds().getOrderCode());
 	}
 
 	private JLabel getLblOk() {
@@ -85,6 +86,7 @@ public class ConfirmationDialog extends JDialog {
 			btnFinish = new JButton("Finish");
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					rf.getMw().getMcDonalds().saveOrder();
 					System.exit(0);
 				}
 			});

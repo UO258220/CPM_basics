@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,6 +18,9 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
+
+import uo.cpm.p3.model.Product;
+import uo.cpm.p3.service.McDonalds;
 
 public class MainWindow extends JFrame {
 
@@ -39,28 +43,17 @@ public class MainWindow extends JFrame {
 	private JButton btnCancel;
 
 	private RegistryForm rF = null;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainWindow frame = new MainWindow();
-					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
+	private McDonalds mcDonalds = null;
 
 	/**
 	 * Create the frame.
+	 * @param mcDonalds 
 	 */
-	public MainWindow() {
+	public MainWindow(McDonalds mcDonalds) {
+		
+		this.mcDonalds = mcDonalds;
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/uo/cpm/p3/ui/img/logo.PNG")));
 		setTitle("McDonalds");
 		setResizable(false);
@@ -82,6 +75,12 @@ public class MainWindow extends JFrame {
 		contentPane.add(getTxtOrderPrice());
 		contentPane.add(getBtnNext());
 		contentPane.add(getBtnCancel());
+		
+		this.getRootPane().setDefaultButton(getBtnNext());
+	}
+
+	public McDonalds getMcDonalds() {
+		return mcDonalds;
 	}
 
 	private JLabel getLblLogo() {
@@ -105,6 +104,8 @@ public class MainWindow extends JFrame {
 	private JLabel getLblProducts() {
 		if (lblProducts == null) {
 			lblProducts = new JLabel("Products:");
+			lblProducts.setDisplayedMnemonic('p');
+			lblProducts.setLabelFor(getCbProducts());
 			lblProducts.setFont(new Font("Arial", Font.PLAIN, 16));
 			lblProducts.setBounds(39, 205, 76, 27);
 		}
@@ -114,8 +115,14 @@ public class MainWindow extends JFrame {
 	private JComboBox getCbProducts() {
 		if (cbProducts == null) {
 			cbProducts = new JComboBox();
+			cbProducts.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					getSpUnits().setValue(1);
+				}
+			});
 			cbProducts.setFont(new Font("Arial", Font.PLAIN, 16));
 			cbProducts.setBounds(39, 253, 324, 27);
+			cbProducts.setModel(new DefaultComboBoxModel( mcDonalds.getMenuProducts() ));
 		}
 		return cbProducts;
 	}
@@ -123,6 +130,8 @@ public class MainWindow extends JFrame {
 	private JLabel getLblUnits() {
 		if (lblUnits == null) {
 			lblUnits = new JLabel("Units:");
+			lblUnits.setDisplayedMnemonic('u');
+			lblUnits.setLabelFor(getSpUnits());
 			lblUnits.setFont(new Font("Arial", Font.PLAIN, 16));
 			lblUnits.setBounds(429, 211, 46, 14);
 		}
@@ -142,9 +151,15 @@ public class MainWindow extends JFrame {
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
 			btnAdd = new JButton("Add");
+			btnAdd.setMnemonic('a');
 			btnAdd.setFont(new Font("Arial", Font.PLAIN, 16));
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Product selectedItem = (Product) getCbProducts().getSelectedItem();
+					int units = (int) getSpUnits().getValue();
+					mcDonalds.addToOrder(selectedItem, units);
+					getTxtOrderPrice().setText(String.format("€.2f", mcDonalds.getOrderTotal()));
+					getBtnNext().setEnabled(true);
 				}
 			});
 			btnAdd.setForeground(Color.WHITE);
@@ -166,6 +181,7 @@ public class MainWindow extends JFrame {
 	private JTextField getTxtOrderPrice() {
 		if (txtOrderPrice == null) {
 			txtOrderPrice = new JTextField();
+			txtOrderPrice.setToolTipText("Total price of the order");
 			txtOrderPrice.setFont(new Font("Arial", Font.PLAIN, 16));
 			txtOrderPrice.setEditable(false);
 			txtOrderPrice.setBounds(429, 348, 246, 36);
@@ -177,6 +193,7 @@ public class MainWindow extends JFrame {
 	private JButton getBtnNext() {
 		if (btnNext == null) {
 			btnNext = new JButton("Next");
+			btnNext.setEnabled(false);
 			btnNext.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					showCustomerInformationDialog();
@@ -200,6 +217,7 @@ public class MainWindow extends JFrame {
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
 			btnCancel = new JButton("Cancel");
+			btnCancel.setMnemonic('c');
 			btnCancel.setFont(new Font("Arial", Font.PLAIN, 16));
 			btnCancel.setForeground(Color.WHITE);
 			btnCancel.setBackground(Color.RED);

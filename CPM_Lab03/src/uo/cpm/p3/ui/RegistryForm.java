@@ -43,9 +43,9 @@ public class RegistryForm extends JDialog {
 	private JPanel pnOrder;
 	private JRadioButton rdbtnOnSite;
 	private JRadioButton rdbtnTakeAway;
-	
+
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	
+
 	private MainWindow mw = null;
 	private ConfirmationDialog cd = null;
 
@@ -53,9 +53,9 @@ public class RegistryForm extends JDialog {
 	 * Create the frame.
 	 */
 	public RegistryForm(MainWindow mainWindow) {
-		
+
 		this.mw = mainWindow;
-		
+
 		setResizable(false);
 		setTitle("McDonalds: Customer Information");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -69,11 +69,18 @@ public class RegistryForm extends JDialog {
 		contentPane.add(getBtnNext());
 		contentPane.add(getPnCustomerInformation());
 		contentPane.add(getPnOrder());
+
+		this.getRootPane().setDefaultButton(getBtnNext());
+	}
+
+	public MainWindow getMw() {
+		return mw;
 	}
 
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
 			btnCancel = new JButton("Cancel");
+			btnCancel.setMnemonic('c');
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					System.exit(0);
@@ -102,14 +109,12 @@ public class RegistryForm extends JDialog {
 	}
 
 	private void checkFields() {
-		if (getTxtNameAndSurname().getText().isBlank() || String.valueOf(getPassword1().getPassword()).isBlank() || 
-				String.valueOf(getPassword2().getPassword()).isBlank()) {
+		if (getTxtNameAndSurname().getText().isBlank() || String.valueOf(getPassword1().getPassword()).isBlank()
+				|| String.valueOf(getPassword2().getPassword()).isBlank()) {
 			JOptionPane.showMessageDialog(null, "None of the fields can be empty");
-		}
-		else if (!String.valueOf(getPassword1().getPassword()).equals(String.valueOf(getPassword2().getPassword()))) {
+		} else if (!String.valueOf(getPassword1().getPassword()).equals(String.valueOf(getPassword2().getPassword()))) {
 			JOptionPane.showMessageDialog(null, "The password fields don't match");
-		}
-		else {
+		} else {
 			this.cd = new ConfirmationDialog(this);
 			this.cd.setLocationRelativeTo(contentPane);
 			this.cd.setModal(true);
@@ -140,6 +145,8 @@ public class RegistryForm extends JDialog {
 	private JLabel getLblNameAndSurname() {
 		if (lblNameAndSurname == null) {
 			lblNameAndSurname = new JLabel("Name and Surname:");
+			lblNameAndSurname.setDisplayedMnemonic('n');
+			lblNameAndSurname.setLabelFor(getTxtNameAndSurname());
 			lblNameAndSurname.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			lblNameAndSurname.setBounds(10, 24, 135, 27);
 		}
@@ -158,8 +165,8 @@ public class RegistryForm extends JDialog {
 	private JComboBox<String> getCbBirthYear() {
 		if (cbBirthYear == null) {
 			cbBirthYear = new JComboBox<String>();
-			cbBirthYear.setModel(new DefaultComboBoxModel(
-					IntStream.rangeClosed(1920, 2020).mapToObj(String::valueOf).toArray()));
+			cbBirthYear.setModel(
+					new DefaultComboBoxModel(IntStream.rangeClosed(1920, 2020).mapToObj(String::valueOf).toArray()));
 			cbBirthYear.setBounds(186, 81, 194, 38);
 		}
 		return cbBirthYear;
@@ -184,6 +191,8 @@ public class RegistryForm extends JDialog {
 	private JLabel getLblBirthDate() {
 		if (lblBirthDate == null) {
 			lblBirthDate = new JLabel("Birthdate:");
+			lblBirthDate.setLabelFor(getCbBirthYear());
+			lblBirthDate.setDisplayedMnemonic('b');
 			lblBirthDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			lblBirthDate.setBounds(10, 85, 135, 27);
 		}
@@ -193,6 +202,8 @@ public class RegistryForm extends JDialog {
 	private JLabel getLblPassword1() {
 		if (lblPassword1 == null) {
 			lblPassword1 = new JLabel("Password:");
+			lblPassword1.setLabelFor(getPassword1());
+			lblPassword1.setDisplayedMnemonic('p');
 			lblPassword1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			lblPassword1.setBounds(10, 149, 135, 27);
 		}
@@ -202,6 +213,8 @@ public class RegistryForm extends JDialog {
 	private JLabel getLblPassword2() {
 		if (lblPassword2 == null) {
 			lblPassword2 = new JLabel("Repeat Password");
+			lblPassword2.setLabelFor(getPassword2());
+			lblPassword2.setDisplayedMnemonic('r');
 			lblPassword2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			lblPassword2.setBounds(10, 209, 135, 27);
 		}
@@ -226,6 +239,7 @@ public class RegistryForm extends JDialog {
 	private JRadioButton getRdbtnOnSite() {
 		if (rdbtnOnSite == null) {
 			rdbtnOnSite = new JRadioButton("On site");
+			rdbtnOnSite.setMnemonic('o');
 			rdbtnOnSite.setSelected(true);
 			buttonGroup.add(rdbtnOnSite);
 			rdbtnOnSite.setBackground(Color.WHITE);
@@ -237,6 +251,7 @@ public class RegistryForm extends JDialog {
 	private JRadioButton getRdbtnTakeAway() {
 		if (rdbtnTakeAway == null) {
 			rdbtnTakeAway = new JRadioButton("Take away");
+			rdbtnTakeAway.setMnemonic('t');
 			buttonGroup.add(rdbtnTakeAway);
 			rdbtnTakeAway.setBackground(Color.WHITE);
 			rdbtnTakeAway.setBounds(215, 45, 109, 23);
