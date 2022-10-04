@@ -5,64 +5,63 @@ import java.util.*;
 import uo.cpm.p3.util.FileUtil;
 
 public class Order {
-	
+
 	private List<Product> orderList = null;
-	private String code="";
-	
-	public Order(){
+	private String code = "";
+
+	public Order() {
 		orderList = new ArrayList<Product>();
-		//We generate the new code for the order:
+		// We generate the new code for the order:
 		generateCode();
 	}
 
-	public void add(Product item, int units){
+	public void add(Product item, int units) {
 		Product itemInOrder = null;
-	
-		for (Product a : orderList){
-			if (a.getCode().equals(item.getCode()))
-			{
+
+		for (Product a : orderList) {
+			if (a.getCode().equals(item.getCode())) {
 				itemInOrder = a;
-				itemInOrder.setUnits(itemInOrder.getUnits()+units);
+				itemInOrder.setUnits(itemInOrder.getUnits() + units);
 				break;
 			}
 		}
-		
-		if (itemInOrder == null){
+
+		if (itemInOrder == null) {
 			Product itemToOrder = new Product(item);
 			itemToOrder.setUnits(units);
 			orderList.add(itemToOrder);
 		}
 	}
-	
+
 	public String getCode() {
 		return code;
 	}
 
-	public float getPrice(){
+	public float getPrice() {
 		float total = 0.0f;
-		for (Product a : orderList){
-			total += a.getPrice()* a.getUnits();
+		for (Product a : orderList) {
+			total += a.getPrice() * a.getUnits();
 		}
 		return total;
 	}
-	
-	public void saveOrder(){
-		FileUtil.saveToFile(code, orderList);
-	  }
 
-	public void initialize(){
+	public void saveOrder() {
+		FileUtil.saveToFile(code, orderList);
+	}
+
+	public void initialize() {
 		orderList.clear();
 	}
-	
+
 	private void generateCode() {
 		String base = "0123456789abcdefghijklmnopqrstuvwxyz";
 		int longitudCodigo = 8;
-		for(int i=0; i<longitudCodigo;i++){ 
-			int numero = (int)(Math.random()*(base.length())); 
+		for (int i = 0; i < longitudCodigo; i++) {
+			int numero = (int) (Math.random() * (base.length()));
 			code += base.charAt(numero);
 		}
 	}
-	
+
 	public float calcTotal() {
 		float total = 0.0f;
 		for (Product a : orderList) {
@@ -70,5 +69,33 @@ public class Order {
 		}
 		return total;
 	}
-}
 
+	public void remove(Product item, int units) {
+		Product itemInOrder = null;
+
+		for (Product a : orderList) {
+			if (a.getCode().equals(item.getCode())) {
+				itemInOrder = a;
+				if (itemInOrder.getUnits() == units) {
+					orderList.remove(itemInOrder);
+				} else {
+					itemInOrder.setUnits(itemInOrder.getUnits() - units);
+				}
+				break;
+			}
+		}
+
+		if (itemInOrder == null) {
+			// Illegal State
+		}
+	}
+
+	public boolean isEmpty() {
+		for (Product a : orderList) {
+			if (a.getUnits() > 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+}
