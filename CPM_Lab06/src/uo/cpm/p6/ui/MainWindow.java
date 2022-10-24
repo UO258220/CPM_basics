@@ -120,6 +120,7 @@ public class MainWindow extends JFrame {
 	private JTextField getTxtScore() {
 		if (txtScore == null) {
 			txtScore = new JTextField();
+			txtScore.setEditable(false);
 			txtScore.setHorizontalAlignment(SwingConstants.CENTER);
 			txtScore.setForeground(Color.GREEN);
 			txtScore.setFont(new Font("Tahoma", Font.BOLD, 34));
@@ -160,6 +161,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					shoot(7);
+				}
+			});
 			btnNewButton.setBorder(new LineBorder(Color.GREEN, 3));
 		}
 		return btnNewButton;
@@ -168,6 +174,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnNewButton_1() {
 		if (btnNewButton_1 == null) {
 			btnNewButton_1 = new JButton("");
+			btnNewButton_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					shoot(6);
+				}
+			});
 			btnNewButton_1.setBorder(new LineBorder(Color.GREEN, 3));
 		}
 		return btnNewButton_1;
@@ -176,6 +187,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnNewButton_2() {
 		if (btnNewButton_2 == null) {
 			btnNewButton_2 = new JButton("");
+			btnNewButton_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					shoot(5);
+				}
+			});
 			btnNewButton_2.setBorder(new LineBorder(Color.GREEN, 3));
 		}
 		return btnNewButton_2;
@@ -184,6 +200,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnNewButton_3() {
 		if (btnNewButton_3 == null) {
 			btnNewButton_3 = new JButton("");
+			btnNewButton_3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					shoot(4);
+				}
+			});
 			btnNewButton_3.setBorder(new LineBorder(Color.GREEN, 3));
 		}
 		return btnNewButton_3;
@@ -192,6 +213,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnNewButton_4() {
 		if (btnNewButton_4 == null) {
 			btnNewButton_4 = new JButton("");
+			btnNewButton_4.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					shoot(3);
+				}
+			});
 			btnNewButton_4.setBorder(new LineBorder(Color.GREEN, 3));
 		}
 		return btnNewButton_4;
@@ -200,6 +226,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnNewButton_5() {
 		if (btnNewButton_5 == null) {
 			btnNewButton_5 = new JButton("");
+			btnNewButton_5.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					shoot(2);
+				}
+			});
 			btnNewButton_5.setBorder(new LineBorder(Color.GREEN, 3));
 		}
 		return btnNewButton_5;
@@ -208,6 +239,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnNewButton_6() {
 		if (btnNewButton_6 == null) {
 			btnNewButton_6 = new JButton("");
+			btnNewButton_6.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					shoot(1);
+				}
+			});
 			btnNewButton_6.setBorder(new LineBorder(Color.GREEN, 3));
 		}
 		return btnNewButton_6;
@@ -216,6 +252,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnNewButton_7() {
 		if (btnNewButton_7 == null) {
 			btnNewButton_7 = new JButton("");
+			btnNewButton_7.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					shoot(0);
+				}
+			});
 			btnNewButton_7.setBorder(new LineBorder(Color.GREEN, 3));
 		}
 		return btnNewButton_7;
