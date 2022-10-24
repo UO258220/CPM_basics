@@ -87,7 +87,7 @@ public class ConfirmationDialog extends JDialog {
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					rf.getMw().getMcDonalds().saveOrder();
-					System.exit(0);
+					rf.getMw().initialize();
 				}
 			});
 			btnFinish.setFont(new Font("Arial", Font.PLAIN, 16));

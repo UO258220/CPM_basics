@@ -8,39 +8,41 @@ public class McDonalds {
 
 	Menu menu = new Menu();
 	Order order = new Order();
-	
+
 	public McDonalds() {
-		
-		
+
 	}
 
-	public Product[] getMenuProducts()
-	{
+	public Product[] getMenuProducts() {
 		return menu.getProducts();
 	}
 
-	public void initOrder()
-	{
+	public void initOrder() {
 		order.initialize();
 	}
-	
-	public String getOrderCode()
-	{
+
+	public String getOrderCode() {
 		return order.getCode();
 	}
-	
-	public void addToOrder ( Product p, Integer units )
-	{
+
+	public void addToOrder(Product p, Integer units) {
 		order.add(p, units);
 	}
-	
-	public void saveOrder()
-	{
+
+	public void saveOrder() {
 		order.saveOrder();
 	}
 
 	public Object getOrderTotal() {
 		// TODO Auto-generated method stub
 		return order.getPrice();
+	}
+
+	public void removeFromOrder(Product p, Integer units) {
+		order.remove(p, units);
+	}
+
+	public boolean orderIsEmpty() {
+		return order.isEmpty();
 	}
 }
