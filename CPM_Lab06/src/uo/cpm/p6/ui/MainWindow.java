@@ -11,6 +11,8 @@ import uo.cpm.p6.service.SpaceInvaders;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import java.awt.Color;
@@ -257,6 +259,19 @@ public class MainWindow extends JFrame {
 		((JButton)getPnBoard().getComponent(position)).setDisabledIcon(icon);
 	}
 	
+	private void updateStateOfTheGame(Integer position) {
+		getTxtScore().setText(String.valueOf(game.getScore()));
+		removeShot();
+		paintCell(position);
+		if (game.isGameOver()) {
+			enableBoard(false);
+			JOptionPane.showMessageDialog(this, "Game Over!!", "Space Invasion", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
 	
+	private void shoot(Integer position) {
+		game.shoot(position);
+		updateStateOfTheGame(position);
+	}
 	
 }
