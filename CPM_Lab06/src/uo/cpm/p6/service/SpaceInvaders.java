@@ -41,4 +41,8 @@ public class SpaceInvaders {
 		return game.getShots();
 	}
 
+	public String getMessage() {
+		return game.getGameOverMessage();
+	}
+
 }

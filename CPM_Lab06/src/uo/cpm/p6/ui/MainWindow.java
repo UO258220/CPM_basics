@@ -274,45 +274,52 @@ public class MainWindow extends JFrame {
 		newShot.setIcon(ImageFactory.loadImage("/img/shoot.png"));
 		return newShot;
 	}
-	
+
 	private void paintShots() {
-		for (int i = 0 ; i < game.getShots() ; i++) {
+		for (int i = 0; i < game.getShots(); i++) {
 			getPnShots().add(newShot());
 		}
 		validate();
 	}
-	
+
 	private void initGame() {
 		game.launch();
 		paintShots();
 		btnDice.setEnabled(false);
 		enableBoard(true);
 	}
-	
+
 	private void removeShot() {
 		getPnShots().remove(0);
 		getPnShots().repaint();
 	}
-	
+
 	private void paintCell(Integer position) {
 		ImageIcon icon = ImageFactory.loadImage(game.getBoard().getPicture(position));
-		((JButton)getPnBoard().getComponent(position)).setIcon(icon);
-		((JButton)getPnBoard().getComponent(position)).setDisabledIcon(icon);
+		((JButton) getPnBoard().getComponent(position)).setIcon(icon);
+		((JButton) getPnBoard().getComponent(position)).setDisabledIcon(icon);
 	}
-	
+
 	private void updateStateOfTheGame(Integer position) {
 		getTxtScore().setText(String.valueOf(game.getScore()));
 		removeShot();
 		paintCell(position);
 		if (game.isGameOver()) {
 			enableBoard(false);
-			JOptionPane.showMessageDialog(this, "Game Over!!", "Space Invasion", JOptionPane.INFORMATION_MESSAGE);
+			paintBoard();
+			JOptionPane.showMessageDialog(this, game.getMessage(), "Space Invasion", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
-	
+
 	private void shoot(Integer position) {
 		game.shoot(position);
 		updateStateOfTheGame(position);
 	}
-	
+
+	private void paintBoard() {
+		for (int pos = 0; pos < game.getBoard().DIM; pos++) {
+			paintCell(pos);
+		}
+	}
+
 }

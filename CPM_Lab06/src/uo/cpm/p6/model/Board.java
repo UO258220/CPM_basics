@@ -10,7 +10,13 @@ public class Board {
 		for (int i=0;i<DIM;i++)
 			cells[i] = new Space(i);
 		int invaderPosition = (int) (Math.random() * DIM);
+		int meteoritePosition;
+		do {
+			meteoritePosition = (int) (Math.random() * DIM);
+		}
+		while (meteoritePosition == invaderPosition);
 		cells[invaderPosition] = new Invader();
+		cells[meteoritePosition] = new Meteorite();
 	}
 
 	public Cell[] getCells() {
