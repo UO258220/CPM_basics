@@ -2,6 +2,7 @@ package uo.cpm.p6.service;
 
 import uo.cpm.p6.model.Board;
 import uo.cpm.p6.rules.Game;
+import uo.cpm.p6.rules.Game.Level;
 
 public class SpaceInvaders {
 
@@ -43,6 +44,14 @@ public class SpaceInvaders {
 
 	public String getMessage() {
 		return game.getGameOverMessage();
+	}
+	
+	public void setLevel(Level level) {
+		game.setLevel(level);
+	}
+	
+	public int getSize() {
+		return game.getBoardSize();
 	}
 
 }

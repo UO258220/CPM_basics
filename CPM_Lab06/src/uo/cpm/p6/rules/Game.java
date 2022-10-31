@@ -5,16 +5,20 @@ import uo.cpm.p6.model.Cell;
 import uo.cpm.p6.model.Dice;
 import uo.cpm.p6.model.Invader;
 import uo.cpm.p6.model.Meteorite;
-import uo.cpm.p6.model.Space;
 
 public class Game {
 
-	public static final Integer MAX_SHOTS = 4;
+	public int maxShots;
 	int score;
 	int shots;
 	private Board board;
 	private boolean invaderFound;
 	private boolean meteoriteFound;
+	private Level level = Level.INTERMEDIATE;
+
+	public enum Level {
+		EASY, INTERMEDIATE, HARD
+	}
 
 	public Board getBoard() {
 		return board;
@@ -25,7 +29,7 @@ public class Game {
 	}
 
 	public void initialize() {
-		board = new Board();
+		board = new Board(level);
 		score = 800;
 		shots = 0;
 	}
@@ -46,15 +50,6 @@ public class Game {
 		score = score + board.getCells()[i].discover();
 	}
 
-	private void shoot(Invader invader) {
-		System.out.println("Invader!");
-	}
-
-	private void shoot(Space space) {
-		System.out.println("Space!");
-
-	}
-
 	public boolean isGameOver() {
 		return (invaderFound || meteoriteFound || shots == 0);
 	}
@@ -64,7 +59,7 @@ public class Game {
 	}
 
 	public void launch() {
-		setShots(Dice.launch());
+		setShots(Dice.launch(maxShots));
 	}
 
 	public int getShots() {
@@ -73,6 +68,26 @@ public class Game {
 
 	private void setShots(int shots) {
 		this.shots = shots;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+		switch (level) {
+		case EASY:
+			maxShots = 5;
+			break;
+		case INTERMEDIATE:
+			maxShots = 4;
+			break;
+		case HARD:
+			maxShots = 3;
+			break;
+		}
+		initialize();
+	}
+
+	public int getBoardSize() {
+		return this.board.getDim();
 	}
 
 	public String getGameOverMessage() {

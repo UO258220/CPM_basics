@@ -1,12 +1,10 @@
 package uo.cpm.p6.model;
 
-import uo.cpm.p6.rules.Game;
-
 public class Dice {
 	
-	public static int launch()
+	public static int launch(int maxShots)
 	{ 
-		return ((int) (Math.random() * Game.MAX_SHOTS) + 1);
+		return ((int) (Math.random() * maxShots) + 1);
 	}
 
 

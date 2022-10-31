@@ -1,34 +1,38 @@
 package uo.cpm.p6.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Toolkit;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import uo.cpm.p6.service.SpaceInvaders;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.Component;
-
-import javax.swing.SwingConstants;
+import java.awt.Font;
 import java.awt.GridLayout;
-import javax.swing.border.LineBorder;
-import java.awt.event.ActionListener;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
+import uo.cpm.p6.rules.Game.Level;
+import uo.cpm.p6.service.SpaceInvaders;
 
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
 	private SpaceInvaders game = null;
+
+	private MyButtonListener mBL = new MyButtonListener();
 
 	private JPanel contentPane;
 	private JButton btnDice;
@@ -38,14 +42,14 @@ public class MainWindow extends JFrame {
 	private JTextField txtScore;
 	private JLabel lblEarth;
 	private JPanel pnBoard;
-	private JButton btnNewButton;
-	private JButton btnNewButton_1;
-	private JButton btnNewButton_2;
-	private JButton btnNewButton_3;
-	private JButton btnNewButton_4;
-	private JButton btnNewButton_5;
-	private JButton btnNewButton_6;
-	private JButton btnNewButton_7;
+	private JMenuBar menuBar;
+	private JMenu mnGame;
+	private JMenu mnHelp;
+	private JMenu mnConfig;
+	private JRadioButtonMenuItem rdbtnmntmEasy;
+	private JRadioButtonMenuItem rdbtnmntmIntermediate;
+	private JRadioButtonMenuItem rdbtnmntmHard;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	/**
 	 * Create the frame.
@@ -59,6 +63,7 @@ public class MainWindow extends JFrame {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1100, 500);
+		setJMenuBar(getMenuBar_1());
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -71,7 +76,7 @@ public class MainWindow extends JFrame {
 		contentPane.add(getLblEarth());
 		contentPane.add(getPnBoard());
 
-		enableBoard(false);
+		initializeGame(Level.INTERMEDIATE);
 	}
 
 	private JButton getBtnDice() {
@@ -146,120 +151,12 @@ public class MainWindow extends JFrame {
 			pnBoard.setBorder(new LineBorder(Color.GREEN, 5));
 			pnBoard.setBounds(47, 309, 995, 108);
 			pnBoard.setLayout(new GridLayout(1, 0, 0, 0));
-			pnBoard.add(getBtnNewButton_7());
-			pnBoard.add(getBtnNewButton_6());
-			pnBoard.add(getBtnNewButton_5());
-			pnBoard.add(getBtnNewButton_4());
-			pnBoard.add(getBtnNewButton_3());
-			pnBoard.add(getBtnNewButton_2());
-			pnBoard.add(getBtnNewButton_1());
-			pnBoard.add(getBtnNewButton());
+
+			for (int i = 0; i < this.game.getSize(); i++) {
+				pnBoard.add(newButton(i));
+			}
 		}
 		return pnBoard;
-	}
-
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					shoot(7);
-				}
-			});
-			btnNewButton.setBorder(new LineBorder(Color.GREEN, 3));
-		}
-		return btnNewButton;
-	}
-
-	private JButton getBtnNewButton_1() {
-		if (btnNewButton_1 == null) {
-			btnNewButton_1 = new JButton("");
-			btnNewButton_1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					shoot(6);
-				}
-			});
-			btnNewButton_1.setBorder(new LineBorder(Color.GREEN, 3));
-		}
-		return btnNewButton_1;
-	}
-
-	private JButton getBtnNewButton_2() {
-		if (btnNewButton_2 == null) {
-			btnNewButton_2 = new JButton("");
-			btnNewButton_2.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					shoot(5);
-				}
-			});
-			btnNewButton_2.setBorder(new LineBorder(Color.GREEN, 3));
-		}
-		return btnNewButton_2;
-	}
-
-	private JButton getBtnNewButton_3() {
-		if (btnNewButton_3 == null) {
-			btnNewButton_3 = new JButton("");
-			btnNewButton_3.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					shoot(4);
-				}
-			});
-			btnNewButton_3.setBorder(new LineBorder(Color.GREEN, 3));
-		}
-		return btnNewButton_3;
-	}
-
-	private JButton getBtnNewButton_4() {
-		if (btnNewButton_4 == null) {
-			btnNewButton_4 = new JButton("");
-			btnNewButton_4.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					shoot(3);
-				}
-			});
-			btnNewButton_4.setBorder(new LineBorder(Color.GREEN, 3));
-		}
-		return btnNewButton_4;
-	}
-
-	private JButton getBtnNewButton_5() {
-		if (btnNewButton_5 == null) {
-			btnNewButton_5 = new JButton("");
-			btnNewButton_5.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					shoot(2);
-				}
-			});
-			btnNewButton_5.setBorder(new LineBorder(Color.GREEN, 3));
-		}
-		return btnNewButton_5;
-	}
-
-	private JButton getBtnNewButton_6() {
-		if (btnNewButton_6 == null) {
-			btnNewButton_6 = new JButton("");
-			btnNewButton_6.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					shoot(1);
-				}
-			});
-			btnNewButton_6.setBorder(new LineBorder(Color.GREEN, 3));
-		}
-		return btnNewButton_6;
-	}
-
-	private JButton getBtnNewButton_7() {
-		if (btnNewButton_7 == null) {
-			btnNewButton_7 = new JButton("");
-			btnNewButton_7.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					shoot(0);
-				}
-			});
-			btnNewButton_7.setBorder(new LineBorder(Color.GREEN, 3));
-		}
-		return btnNewButton_7;
 	}
 
 	private void enableBoard(boolean state) {
@@ -317,9 +214,144 @@ public class MainWindow extends JFrame {
 	}
 
 	private void paintBoard() {
-		for (int pos = 0; pos < game.getBoard().DIM; pos++) {
+		game.getBoard();
+		for (int pos = 0; pos < this.game.getSize(); pos++) {
 			paintCell(pos);
 		}
 	}
 
+	private JButton newButton(Integer position) {
+		JButton bt = new JButton();
+		bt.setActionCommand(position.toString());
+		bt.setBorder(new LineBorder(Color.GREEN, 3));
+		bt.addActionListener(mBL);
+		return bt;
+	}
+
+	private void prepareBoard(Level level) {
+		Integer width = 0;
+		Integer pos = 0;
+		switch (level) {
+		case EASY: {
+			pos = 47;
+			width = 1010;
+			break;
+		}
+		case INTERMEDIATE: {
+			pos = 150;
+			width = 815;
+			break;
+		}
+		case HARD: {
+			pos = 240;
+			width = 610;
+			break;
+		}
+		}
+		getPnBoard().setBounds(pos, 309, width, 100);
+		getPnBoard().setLayout(new GridLayout(1, this.game.getSize(), 0, 0));
+
+		getPnBoard().removeAll();
+
+		for (int i = 0; i < this.game.getSize(); i++) {
+			getPnBoard().add(newButton(i));
+		}
+		enableBoard(false);
+		validate();
+	}
+
+	private void initializeGame(Level level) {
+		game.initialize();
+
+		prepareBoard(level);
+
+		getBtnDice().setEnabled(true);
+		getPnShots().removeAll();
+		getTxtScore().setText(String.valueOf(game.getScore()));
+	}
+
+	private JMenuBar getMenuBar_1() {
+		if (menuBar == null) {
+			menuBar = new JMenuBar();
+			menuBar.add(getMnGame());
+			menuBar.add(getMnConfig());
+			menuBar.add(getMnHelp());
+		}
+		return menuBar;
+	}
+
+	private JMenu getMnGame() {
+		if (mnGame == null) {
+			mnGame = new JMenu("Game");
+		}
+		return mnGame;
+	}
+
+	private JMenu getMnHelp() {
+		if (mnHelp == null) {
+			mnHelp = new JMenu("Help");
+		}
+		return mnHelp;
+	}
+
+	private JMenu getMnConfig() {
+		if (mnConfig == null) {
+			mnConfig = new JMenu("Configuration");
+			mnConfig.add(getRdbtnmntmEasy());
+			mnConfig.add(getRdbtnmntmIntermediate());
+			mnConfig.add(getRdbtnmntmHard());
+		}
+		return mnConfig;
+	}
+
+	private JRadioButtonMenuItem getRdbtnmntmEasy() {
+		if (rdbtnmntmEasy == null) {
+			rdbtnmntmEasy = new JRadioButtonMenuItem("EASY");
+			rdbtnmntmEasy.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					game.setLevel(Level.EASY);
+					initializeGame(Level.EASY);
+				}
+			});
+			buttonGroup.add(rdbtnmntmEasy);
+		}
+		return rdbtnmntmEasy;
+	}
+
+	private JRadioButtonMenuItem getRdbtnmntmIntermediate() {
+		if (rdbtnmntmIntermediate == null) {
+			rdbtnmntmIntermediate = new JRadioButtonMenuItem("INT");
+			rdbtnmntmIntermediate.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					game.setLevel(Level.INTERMEDIATE);
+					initializeGame(Level.INTERMEDIATE);
+				}
+			});
+			buttonGroup.add(rdbtnmntmIntermediate);
+			rdbtnmntmIntermediate.setSelected(true);
+		}
+		return rdbtnmntmIntermediate;
+	}
+
+	private JRadioButtonMenuItem getRdbtnmntmHard() {
+		if (rdbtnmntmHard == null) {
+			rdbtnmntmHard = new JRadioButtonMenuItem("HARD");
+			rdbtnmntmHard.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					game.setLevel(Level.HARD);
+					initializeGame(Level.HARD);
+				}
+			});
+			buttonGroup.add(rdbtnmntmHard);
+		}
+		return rdbtnmntmHard;
+	}
+
+	class MyButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JButton source = (JButton) e.getSource();
+			Integer position = Integer.parseInt(source.getActionCommand());
+			shoot(position);
+		}
+	}
 }
