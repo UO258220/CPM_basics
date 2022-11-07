@@ -1,0 +1,71 @@
+//Here you will find some pieces of code used in the labs that could be (directly or after adaptation) for the exam.
+
+// Transforming a List into an Array
+public Product[] getProducts(){
+	Product[] products = listProducts.toArray(new Product[listProducts.size()]);
+	return products;	
+}
+
+// Reading files...
+public static void loadFile (String fileName, List<Product> listCatalog) {
+	   String line;
+	   String[] infoProduct= null;	   
+	   try {
+	    	   BufferedReader file = new BufferedReader(new FileReader(fileName));
+	    		while (file.ready()) {
+	    			line = file.readLine();
+	    			infoProduct = line.split("@");
+	    			listCatalog.add(new Product(infoProduct[0],infoProduct[1],infoProduct[2],Float.parseFloat(infoProduct[3]),0));
+	    		}
+	    		file.close();
+	    }
+	    catch (FileNotFoundException fnfe) {
+	      System.out.println("File not found");
+	    }
+	    catch (IOException ioe) {
+	      new RuntimeException("I/O Error");
+	    } 
+	  }
+
+// Adding an element to a list...
+public void add (Product productCatalog, int units){
+		Product productInOrder = null;
+	
+		for (Product a : listOrder){
+			if (a.getCode().equals(productCatalog.getCode()))
+				productInOrder = a;
+		}
+		
+		if (productInOrder == null){
+			Product productToOrder = new Product(productCatalog);
+			productToOrder.setunits(units);
+			listOrder.add(productToOrder);
+		}
+		else {
+			int totalunits = productToOrder.getunits() + units;
+			productToOrder.setunits(totalunits);
+		}
+	}
+
+// Redefining toString
+public String toString() {
+	StringBuffer buffer = new StringBuffer();
+	buffer.append(this.type);
+	buffer.append(" - ");
+	buffer.append(this.name);
+	buffer.append(" - ");
+	buffer.append(this.price);
+	buffer.append(" €");
+	if (this.units!=0){
+		buffer.append(" (");
+		buffer.append(this.units);
+		buffer.append(" uds)");
+		}
+	return buffer.toString();
+	}
+   }	
+
+// Simulating the dice
+public static int launch() { 
+	return ((int) (Math.random() * Game.MAX_SHOTS + 1);
+ }
