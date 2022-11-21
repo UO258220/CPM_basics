@@ -1,9 +1,16 @@
 package uo.cpm.p8.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.File;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -23,12 +30,11 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import uo.cpm.p8.player.MusicPlayer;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.List;
-import java.awt.event.ActionEvent;
 
 public class MainWindow extends JFrame {
 
@@ -98,12 +104,17 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.add(getPnNorth(), BorderLayout.NORTH);
 		contentPane.add(getPnCenter(), BorderLayout.CENTER);
+		setMinimumSize(new Dimension(558, 254));
 	}
 
 	private JFileChooser getSelector() {
 		if (selector == null) {
 			selector = new JFileChooser();
 			selector.setMultiSelectionEnabled(true);
+			
+			selector.setFileFilter(new FileNameExtensionFilter("Mp3 Files", "mp3"));
+			String desktopPath = System.getProperty("user.home") + "/Desktop";
+			selector.setCurrentDirectory(new File(desktopPath));
 		}
 		return selector;
 	}
@@ -130,6 +141,12 @@ public class MainWindow extends JFrame {
 	private JSlider getSlVolume() {
 		if (slVolume == null) {
 			slVolume = new JSlider();
+			slVolume.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					txtVol.setText(String.valueOf(slVolume.getValue()));
+					setVolume();
+				}
+			});
 			slVolume.setPaintTicks(true);
 			slVolume.setPaintLabels(true);
 			slVolume.setMinorTickSpacing(10);
@@ -290,6 +307,16 @@ public class MainWindow extends JFrame {
 	private JButton getBtnRew() {
 		if (btnRew == null) {
 			btnRew = new JButton("\u25C4\u25C4");
+			btnRew.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Integer selectedIndex = list2.getSelectedIndex();
+					if (selectedIndex > 0) {
+						selectedIndex--;
+						list2.setSelectedIndex(selectedIndex);
+						mp.play(((MyFile) list2.getSelectedValue()).getFile());
+					}
+				}
+			});
 			btnRew.setMnemonic('r');
 			btnRew.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
@@ -299,6 +326,14 @@ public class MainWindow extends JFrame {
 	private JButton getBtnPlay() {
 		if (btnPlay == null) {
 			btnPlay = new JButton("\u25BA");
+			btnPlay.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					File selectedFile = ((MyFile) list2.getSelectedValue()).getFile();
+					if (selectedFile != null) {
+						mp.play(selectedFile);
+					}
+				}
+			});
 			btnPlay.setMnemonic('p');
 			btnPlay.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
@@ -308,6 +343,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnStop() {
 		if (btnStop == null) {
 			btnStop = new JButton("\u25A0");
+			btnStop.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					mp.stop();
+				}
+			});
 			btnStop.setMnemonic('s');
 			btnStop.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
@@ -317,6 +357,16 @@ public class MainWindow extends JFrame {
 	private JButton getBtnFor() {
 		if (btnFor == null) {
 			btnFor = new JButton("\u25BA\u25BA");
+			btnFor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Integer selectedIndex = list2.getSelectedIndex();
+					if (selectedIndex < modelList2.getSize()) {
+						selectedIndex++;
+						list2.setSelectedIndex(selectedIndex);
+						mp.play(((MyFile) list2.getSelectedValue()).getFile());
+					}
+				}
+			});
 			btnFor.setMnemonic('f');
 			btnFor.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
@@ -326,6 +376,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnDel() {
 		if (btnDel == null) {
 			btnDel = new JButton("Del");
+			btnDel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					modelList2.removeElement(list2.getSelectedValue());
+				}
+			});
 			btnDel.setMnemonic('l');
 			btnDel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
@@ -403,7 +458,7 @@ public class MainWindow extends JFrame {
 					Integer response = getSelector().showOpenDialog(rootPane);
 					if (response == JFileChooser.APPROVE_OPTION) {
 						for (File f : getSelector().getSelectedFiles()) {
-							modelList1.addElement(f);
+							modelList1.addElement(new MyFile(f));
 						}
 					}
 				}
@@ -446,4 +501,10 @@ public class MainWindow extends JFrame {
 		}
 		return mntmAbout;
 	}
+	
+	private void setVolume() {
+		Double volMax = (double) slVolume.getMaximum();
+		mp.setVolume(slVolume.getValue(), volMax);
+	}
+	
 }
